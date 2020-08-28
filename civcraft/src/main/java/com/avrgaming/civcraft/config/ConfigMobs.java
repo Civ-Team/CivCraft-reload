@@ -5,8 +5,8 @@ import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,35 +74,35 @@ public class ConfigMobs {
         CivLog.info("Loaded " + mobs.size() + " Custom Mobs.");
     }
 
-    public void setMaxHealth(CraftEntity ent, double health) {
+    public void setMaxHealth(Entity ent, double health) {
         ((Attributable) ent).getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
         ((Damageable) ent).setHealth(health);
     }
 
-    public void modifySpeed(CraftEntity ent, double percent) {
+    public void modifySpeed(Entity ent, double percent) {
         double speed = (((Attributable) ent).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue()) * percent;
         ((Attributable) ent).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speed);
     }
 
-    public void setAttack(CraftEntity ent, double attack) {
+    public void setAttack(Entity ent, double attack) {
         AttributeInstance attribute = ((Attributable) ent).getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
         if (attribute != null) {
             attribute.setBaseValue(attack);
         }
     }
 
-    public void setDefense(CraftEntity ent, double defense) {
+    public void setDefense(Entity ent, double defense) {
         AttributeInstance attribute = ((Attributable) ent).getAttribute(Attribute.GENERIC_ARMOR);
         if (attribute != null) {
             attribute.setBaseValue(defense);
         }
     }
 
-    public void setFollowRange(CraftEntity ent, double range) {
+    public void setFollowRange(Entity ent, double range) {
         ((Attributable) ent).getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(range);
     }
 
-    public void setKnockbackResistance(CraftEntity ent, double resist) {
+    public void setKnockbackResistance(Entity ent, double resist) {
         ((Attributable) ent).getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(resist);
     }
 }

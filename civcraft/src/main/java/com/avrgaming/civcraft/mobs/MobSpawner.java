@@ -11,15 +11,12 @@ import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.object.TownChunk;
 import com.avrgaming.civcraft.threading.TaskMaster;
-import com.avrgaming.civcraft.util.BukkitObjects;
 import com.avrgaming.civcraft.util.CivColor;
-import net.minecraft.server.v1_12_R1.Entity;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class MobSpawner {
 
     public static void despawnAllCustom() {
         for (Entity mob : CustomMobListener.customMobs.values()) {
-            mob.getBukkitEntity().remove();
+            mob.remove();
         }
     }
 
@@ -42,9 +39,9 @@ public class MobSpawner {
 
         if (custom) {
             for (Entity e : CustomMobListener.customMobs.values()) {
-                CustomMobListener.customMobs.remove(e.getUniqueID());
-                CustomMobListener.mobList.remove(e.getUniqueID());
-                e.getBukkitEntity().remove();
+                CustomMobListener.customMobs.remove(e.getUniqueId());
+                CustomMobListener.mobList.remove(e.getUniqueId());
+                e.remove();
                 countCustom++;
                 countTotal++;
             }
@@ -217,35 +214,32 @@ public class MobSpawner {
 
     @SuppressWarnings("deprecation")
     private static void spawnCustomMob(ConfigMobs cmob, Location loc) {
-        CraftWorld world = (CraftWorld) loc.getWorld();
+        World world = loc.getWorld();
 //        world.loadChunk(loc.getChunk());
 
-        Entity ent = world.createEntity(loc, EntityType.valueOf(cmob.entity).getEntityClass());
+        Entity ent = world.spawnEntity(loc, EntityType.valueOf(cmob.entity));
 
-        cmob.setMaxHealth(ent.getBukkitEntity(), cmob.max_health);
-        cmob.modifySpeed(ent.getBukkitEntity(), cmob.move_speed);
-        if (ent.getBukkitEntity().getType() != EntityType.SLIME) {
-            cmob.setAttack(ent.getBukkitEntity(), cmob.attack_dmg);
+        cmob.setMaxHealth(ent, cmob.max_health);
+        cmob.modifySpeed(ent, cmob.move_speed);
+        if (ent.getType() != EntityType.SLIME) {
+            cmob.setAttack(ent, cmob.attack_dmg);
         }
-        cmob.setDefense(ent.getBukkitEntity(), cmob.defense_dmg);
-        cmob.setFollowRange(ent.getBukkitEntity(), cmob.follow_range);
-        cmob.setKnockbackResistance(ent.getBukkitEntity(), cmob.kb_resistance);
+        cmob.setDefense(ent, cmob.defense_dmg);
+        cmob.setFollowRange(ent, cmob.follow_range);
+        cmob.setKnockbackResistance(ent, cmob.kb_resistance);
 
         if (cmob.name != null && !cmob.name.equals("")) {
             ent.setCustomName(CivColor.colorize(cmob.name));
         }
         ent.setCustomNameVisible(cmob.visible);
 
-        ent.getBukkitEntity().setMetadata("civ_custommob", new FixedMetadataValue(CivCraft.getPlugin(), "true"));
-        BukkitObjects.getScheduler().callSyncMethod(CivCraft.getPlugin(), () -> {
-            return world.addEntity(ent, CreatureSpawnEvent.SpawnReason.CUSTOM);
-        });
-        CustomMobListener.customMobs.put(ent.getUniqueID(), ent);
-        CustomMobListener.mobList.put(ent.getUniqueID(), cmob);
+        ent.setMetadata("civ_custommob", new FixedMetadataValue(CivCraft.getPlugin(), "true"));
+        CustomMobListener.customMobs.put(ent.getUniqueId(), ent);
+        CustomMobListener.mobList.put(ent.getUniqueId(), cmob);
 
         class SyncTask implements Runnable {
 
-            Entity ent;
+            final Entity ent;
 
             public SyncTask(Entity ent) {
                 this.ent = ent;
@@ -253,7 +247,7 @@ public class MobSpawner {
 
             @Override
             public void run() {
-                LivingEntity lent = (LivingEntity) ent.getBukkitEntity();
+                LivingEntity lent = (LivingEntity) ent;
                 // Equipment
                 lent.getEquipment().setHelmet(null);
                 lent.getEquipment().setChestplate(null);

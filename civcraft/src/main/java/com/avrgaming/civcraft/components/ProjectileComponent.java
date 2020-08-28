@@ -26,10 +26,8 @@ import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.structure.Buildable;
 import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.util.BlockCoord;
-import net.minecraft.server.v1_12_R1.Vec3D;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -45,7 +43,7 @@ public abstract class ProjectileComponent extends Component {
     protected PlayerProximityComponent proximityComponent;
     private Location turretCenter;
 
-    private HashSet<BlockCoord> turrets = new HashSet<BlockCoord>();
+    private final HashSet<BlockCoord> turrets = new HashSet<BlockCoord>();
 
     public ProjectileComponent(Buildable buildable, Location turretCenter) {
         this.buildable = buildable;
@@ -136,10 +134,7 @@ public abstract class ProjectileComponent extends Component {
             return false;
         }
 
-        if (residentLocation.distance(turretCenter) <= range) {
-            return true;
-        }
-        return false;
+        return residentLocation.distance(turretCenter) <= range;
     }
 
     private boolean isLit(Player player) {
@@ -149,10 +144,12 @@ public abstract class ProjectileComponent extends Component {
     }
 
     private boolean canSee(Player player, Location loc2) {
-        Location loc1 = player.getLocation();
-        Vec3D vec1 = new Vec3D(loc1.getX(), loc1.getY() + player.getEyeHeight(), loc1.getZ());
-        Vec3D vec2 = new Vec3D(loc2.getX(), loc2.getY(), loc2.getZ());
-        return ((CraftWorld) loc1.getWorld()).getHandle().rayTrace(vec1, vec2) == null;
+        double yaw = 2 * Math.PI - Math.PI * player.getLocation().getYaw() / 180;
+        Vector v = loc2.toVector().subtract(player.getLocation().toVector());
+        Vector r = new Vector(Math.sin(yaw), 0, Math.cos(yaw));
+        float theta = r.angle(v);
+        //Can vary range of theta accordingly (where theta is the angle of this function's 'peripheral' vision)
+        return Math.PI / 2 < theta && theta < 3 * Math.PI / 2;
     }
 
     protected Location adjustTurretLocation(Location turretLoc, Location playerLoc) {

@@ -19,9 +19,9 @@ public class AdminReportCommand
     public void init() {
         this.command = "/ad report";
         this.displayName = CivSettings.localize.localizedString("adcmd_report_name");
-        this.commands.put("buglist", CivSettings.localize.localizedString("adcmd_report_buglistDesc", Bukkit.getServer().getServerName()));
-        this.commands.put("playerlist", CivSettings.localize.localizedString("adcmd_report_playerlistDesc", Bukkit.getServer().getServerName()));
-        this.commands.put("close", CivSettings.localize.localizedString("adcmd_report_closelistDesc", Bukkit.getServer().getServerName()));
+        this.commands.put("buglist", CivSettings.localize.localizedString("adcmd_report_buglistDesc", Bukkit.getServer().getName()));
+        this.commands.put("playerlist", CivSettings.localize.localizedString("adcmd_report_playerlistDesc", Bukkit.getServer().getName()));
+        this.commands.put("close", CivSettings.localize.localizedString("adcmd_report_closelistDesc", Bukkit.getServer().getName()));
     }
 
     public void close_cmd() throws CivException {
@@ -57,21 +57,21 @@ public class AdminReportCommand
 
     public void buglist_cmd() {
         SimpleDateFormat sdf = new SimpleDateFormat("M/dd/yy h:mm:ss a z");
-        CivMessage.sendHeading(this.sender, "Server Bugs " + Bukkit.getServerName());
+        CivMessage.sendHeading(this.sender, "Server Bugs " + Bukkit.getServer().getName());
         for (Report report : CivGlobal.getReports()) {
             if (report.getClosed() || !report.getBug()) continue;
             String message = CivColor.LightGray + "(" + report.getId() + ") " + "§a" + "Reporter: " + CivColor.Red + report.getReportedBy() + " " + "§d" + "Time: " + sdf.format(report.getTime()) + " " + "§b" + "Proof: " + report.getProof();
-            CivMessage.send((Object) this.sender, message);
+            CivMessage.send(this.sender, message);
         }
     }
 
     public void playerlist_cmd() {
         SimpleDateFormat sdf = new SimpleDateFormat("M/dd/yy h:mm:ss a z");
-        CivMessage.sendHeading(this.sender, "Player Reports " + Bukkit.getServerName());
+        CivMessage.sendHeading(this.sender, "Player Reports " + Bukkit.getServer().getName());
         for (Report report : CivGlobal.getReports()) {
             if (report.getClosed() || report.getBug()) continue;
             String message = CivColor.LightGray + "(" + report.getId() + ") " + "§a" + "Reporter: " + CivColor.Red + report.getReportedBy() + " " + "§d" + "Time: " + sdf.format(report.getTime()) + " " + "§b" + "Proof: " + report.getProof() + " " + "§2" + "Player: " + report.getCause();
-            CivMessage.send((Object) this.sender, message);
+            CivMessage.send(this.sender, message);
         }
     }
 

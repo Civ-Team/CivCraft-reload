@@ -12,12 +12,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.IllegalFormatException;
 
 public class Localize {
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
     public String languageFile;
 
     public Localize(JavaPlugin plugin) {
@@ -30,7 +29,7 @@ public class Localize {
     }
 
     public void setLanguageFile(String langFile) {
-        if (langFile.equals("") || langFile == null) {
+        if (langFile == null || langFile.equals("")) {
             this.languageFile = "default_lang.yml";
         } else {
             this.languageFile = langFile;
@@ -44,8 +43,7 @@ public class Localize {
     }
 
     public Boolean isDefault() {
-        Boolean nameCheck = (languageFile.equalsIgnoreCase("default_lang.yml"));
-        return nameCheck;
+        return languageFile.equalsIgnoreCase("default_lang.yml");
     }
 
     public String localizedString(String pathToString) {
@@ -108,11 +106,7 @@ public class Localize {
         YamlConfiguration cfg = new YamlConfiguration();
         try {
             cfg.load(defaultLocalizedStringsFile);
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (InvalidConfigurationException e1) {
+        } catch (IOException | InvalidConfigurationException e1) {
             e1.printStackTrace();
         }
         defaultLocalizedStrings.setDefaults(cfg);
@@ -140,11 +134,7 @@ public class Localize {
         YamlConfiguration cfg = new YamlConfiguration();
         try {
             cfg.load(localizedStringsFile);
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (InvalidConfigurationException e1) {
+        } catch (IOException | InvalidConfigurationException e1) {
             e1.printStackTrace();
         }
         localizedStrings.setDefaults(cfg);

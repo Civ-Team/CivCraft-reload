@@ -22,7 +22,7 @@ import java.util.Map.Entry;
 public class InventorySerializer {
 
     private static String getSerializedItemStack(ItemStack is) {
-        String serializedItemStack = new String();
+        String serializedItemStack = "";
 
         String isType = String.valueOf(ItemManager.getId(is.getType()));
         serializedItemStack += "t@" + isType;
@@ -77,7 +77,7 @@ public class InventorySerializer {
 
     private static ItemStack getItemStackFromSerial(String serial) {
         ItemStack is = null;
-        Boolean createdItemStack = false;
+        boolean createdItemStack = false;
         List<String> lore = new LinkedList<String>();
 
         //String[] serializedItemStack = serializedBlock[1].split("&");
@@ -85,14 +85,14 @@ public class InventorySerializer {
         for (String itemInfo : serializedItemStack) {
             String[] itemAttribute = itemInfo.split("@");
             if (itemAttribute[0].equals("t")) {
-                is = ItemManager.createItemStack(Integer.valueOf(itemAttribute[1]), 1);
+                is = ItemManager.createItemStack(Integer.parseInt(itemAttribute[1]), 1);
                 createdItemStack = true;
             } else if (itemAttribute[0].equals("d") && createdItemStack) {
-                is.setDurability(Short.valueOf(itemAttribute[1]));
+                is.setDurability(Short.parseShort(itemAttribute[1]));
             } else if (itemAttribute[0].equals("a") && createdItemStack) {
-                is.setAmount(Integer.valueOf(itemAttribute[1]));
+                is.setAmount(Integer.parseInt(itemAttribute[1]));
             } else if (itemAttribute[0].equals("e") && createdItemStack) {
-                is.addEnchantment(ItemManager.getEnchantById(Integer.valueOf(itemAttribute[1])), Integer.valueOf(itemAttribute[2]));
+                is.addEnchantment(ItemManager.getEnchantById(Integer.parseInt(itemAttribute[1])), Integer.parseInt(itemAttribute[2]));
             } else if (itemAttribute[0].equals("l") && createdItemStack) {
                 String decodedString = Base64Decoder.decodeStr(itemAttribute[1]);
                 lore.add(decodedString);
@@ -172,7 +172,7 @@ public class InventorySerializer {
 
         for (int i = 1; i < serializedBlocks.length; i++) {
             String[] serializedBlock = serializedBlocks[i].split("#");
-            int stackPosition = Integer.valueOf(serializedBlock[0]);
+            int stackPosition = Integer.parseInt(serializedBlock[0]);
 
             if (stackPosition >= inv.getSize()) {
                 continue;
@@ -196,7 +196,6 @@ public class InventorySerializer {
             pInv.setArmorContents(contents);
         }
 
-        return;
     }
 
 }

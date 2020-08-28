@@ -89,7 +89,7 @@ public class CivSettings {
 
     public static FileConfiguration cultureConfig; /* culture.yml */
     public static Map<Integer, ConfigCultureLevel> cultureLevels = new HashMap<Integer, ConfigCultureLevel>();
-    private static Map<String, ConfigCultureBiomeInfo> cultureBiomes = new HashMap<String, ConfigCultureBiomeInfo>();
+    private static final Map<String, ConfigCultureBiomeInfo> cultureBiomes = new HashMap<String, ConfigCultureBiomeInfo>();
 
     public static FileConfiguration structureConfig; /* structures.yml */
     public static Map<String, ConfigBuildableInfo> structures = new HashMap<String, ConfigBuildableInfo>();
@@ -230,7 +230,7 @@ public class CivSettings {
     public static Map<String, ConfigSpaceCraftMat> space_crafts = new HashMap<String, ConfigSpaceCraftMat>();
     public static Map<Integer, ConfigLabLevel> labLevels = new HashMap<Integer, ConfigLabLevel>();
 
-    public static void init(JavaPlugin plugin) throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
+    public static void init(JavaPlugin plugin) throws IOException, InvalidConfigurationException, InvalidConfiguration {
         CivSettings.plugin = (CivCraft) plugin;
 
         String languageFile = CivSettings.getStringBase("localization_file");
@@ -347,34 +347,34 @@ public class CivSettings {
 
 
     private static void initRestrictedUndoBlocks() {
-        restrictedUndoBlocks.add(Material.CROPS);
+        restrictedUndoBlocks.add(Material.LEGACY_CROPS);
         restrictedUndoBlocks.add(Material.CARROT);
         restrictedUndoBlocks.add(Material.POTATO);
         restrictedUndoBlocks.add(Material.REDSTONE);
         restrictedUndoBlocks.add(Material.REDSTONE_WIRE);
-        restrictedUndoBlocks.add(Material.REDSTONE_TORCH_OFF);
-        restrictedUndoBlocks.add(Material.REDSTONE_TORCH_ON);
-        restrictedUndoBlocks.add(Material.DIODE_BLOCK_OFF);
-        restrictedUndoBlocks.add(Material.DIODE_BLOCK_ON);
-        restrictedUndoBlocks.add(Material.REDSTONE_COMPARATOR_OFF);
-        restrictedUndoBlocks.add(Material.REDSTONE_COMPARATOR_ON);
-        restrictedUndoBlocks.add(Material.REDSTONE_COMPARATOR);
+        restrictedUndoBlocks.add(Material.LEGACY_REDSTONE_TORCH_OFF);
+        restrictedUndoBlocks.add(Material.LEGACY_REDSTONE_TORCH_ON);
+        restrictedUndoBlocks.add(Material.LEGACY_DIODE_BLOCK_OFF);
+        restrictedUndoBlocks.add(Material.LEGACY_DIODE_BLOCK_ON);
+        restrictedUndoBlocks.add(Material.LEGACY_REDSTONE_COMPARATOR_OFF);
+        restrictedUndoBlocks.add(Material.LEGACY_REDSTONE_COMPARATOR_ON);
+        restrictedUndoBlocks.add(Material.LEGACY_REDSTONE_COMPARATOR);
         restrictedUndoBlocks.add(Material.STRING);
         restrictedUndoBlocks.add(Material.TRIPWIRE);
-        restrictedUndoBlocks.add(Material.SUGAR_CANE_BLOCK);
+        restrictedUndoBlocks.add(Material.LEGACY_SUGAR_CANE_BLOCK);
         restrictedUndoBlocks.add(Material.BEETROOT_SEEDS);
-        restrictedUndoBlocks.add(Material.LONG_GRASS);
-        restrictedUndoBlocks.add(Material.RED_ROSE);
+        restrictedUndoBlocks.add(Material.LEGACY_LONG_GRASS);
+        restrictedUndoBlocks.add(Material.LEGACY_RED_ROSE);
         restrictedUndoBlocks.add(Material.RED_MUSHROOM);
-        restrictedUndoBlocks.add(Material.DOUBLE_PLANT);
-        restrictedUndoBlocks.add(Material.CAKE_BLOCK);
+        restrictedUndoBlocks.add(Material.LEGACY_DOUBLE_PLANT);
+        restrictedUndoBlocks.add(Material.LEGACY_CAKE_BLOCK);
         restrictedUndoBlocks.add(Material.CACTUS);
-        restrictedUndoBlocks.add(Material.PISTON_BASE);
-        restrictedUndoBlocks.add(Material.PISTON_EXTENSION);
-        restrictedUndoBlocks.add(Material.PISTON_MOVING_PIECE);
-        restrictedUndoBlocks.add(Material.PISTON_STICKY_BASE);
+        restrictedUndoBlocks.add(Material.LEGACY_PISTON_BASE);
+        restrictedUndoBlocks.add(Material.LEGACY_PISTON_EXTENSION);
+        restrictedUndoBlocks.add(Material.LEGACY_PISTON_MOVING_PIECE);
+        restrictedUndoBlocks.add(Material.LEGACY_PISTON_STICKY_BASE);
         restrictedUndoBlocks.add(Material.TRIPWIRE_HOOK);
-        restrictedUndoBlocks.add(Material.SAPLING);
+        restrictedUndoBlocks.add(Material.LEGACY_SAPLING);
         restrictedUndoBlocks.add(Material.PUMPKIN_STEM);
         restrictedUndoBlocks.add(Material.MELON_STEM);
 
@@ -384,11 +384,11 @@ public class CivSettings {
         playerEntityWeapons.add(EntityType.PLAYER);
         playerEntityWeapons.add(EntityType.ARROW);
         playerEntityWeapons.add(EntityType.SPECTRAL_ARROW);
-        playerEntityWeapons.add(EntityType.TIPPED_ARROW);
+        playerEntityWeapons.add(EntityType.ARROW);
         playerEntityWeapons.add(EntityType.EGG);
         playerEntityWeapons.add(EntityType.SNOWBALL);
         playerEntityWeapons.add(EntityType.SPLASH_POTION);
-        playerEntityWeapons.add(EntityType.LINGERING_POTION);
+        playerEntityWeapons.add(EntityType.LIGHTNING);
         playerEntityWeapons.add(EntityType.FISHING_HOOK);
     }
 
@@ -421,7 +421,7 @@ public class CivSettings {
         }
     }
 
-    public static FileConfiguration loadCivConfig(String filepath) throws FileNotFoundException, IOException, InvalidConfigurationException {
+    public static FileConfiguration loadCivConfig(String filepath) throws IOException, InvalidConfigurationException {
 
         File file = new File(plugin.getDataFolder().getPath() + "/data/" + filepath);
         if (!file.exists()) {
@@ -436,13 +436,13 @@ public class CivSettings {
         return cfg;
     }
 
-    public static void reloadGovConfigFiles() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
+    public static void reloadGovConfigFiles() throws IOException, InvalidConfigurationException, InvalidConfiguration {
         CivSettings.governments.clear();
         governmentConfig = loadCivConfig("governments.yml");
         ConfigGovernment.loadConfig(governmentConfig, governments);
     }
 
-    private static void loadConfigFiles() throws FileNotFoundException, IOException, InvalidConfigurationException {
+    private static void loadConfigFiles() throws IOException, InvalidConfigurationException {
         townConfig = loadCivConfig("town.yml");
         civConfig = loadCivConfig("civ.yml");
         cultureConfig = loadCivConfig("culture.yml");
@@ -468,7 +468,7 @@ public class CivSettings {
         mobsConfig = loadCivConfig("mobs.yml");
     }
 
-    public static void reloadPerks() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
+    public static void reloadPerks() throws IOException, InvalidConfigurationException, InvalidConfiguration {
         perkConfig = loadCivConfig("perks.yml");
         ConfigPerk.loadConfig(perkConfig, perks);
         ConfigPerk.loadTemplates(perkConfig, templates);
@@ -567,15 +567,15 @@ public class CivSettings {
         restrictedItems.put(Material.BUCKET, 0);
         restrictedItems.put(Material.WATER_BUCKET, 0);
         restrictedItems.put(Material.LAVA_BUCKET, 0);
-        restrictedItems.put(Material.CAKE_BLOCK, 0);
+        restrictedItems.put(Material.LEGACY_CAKE_BLOCK, 0);
         restrictedItems.put(Material.CAULDRON, 0);
-        restrictedItems.put(Material.DIODE, 0);
-        restrictedItems.put(Material.INK_SACK, 0);
+        restrictedItems.put(Material.LEGACY_DIODE, 0);
+        restrictedItems.put(Material.LEGACY_INK_SACK, 0);
         restrictedItems.put(Material.ITEM_FRAME, 0);
         restrictedItems.put(Material.PAINTING, 0);
         restrictedItems.put(Material.SHEARS, 0);
-        restrictedItems.put(Material.STATIONARY_LAVA, 0);
-        restrictedItems.put(Material.STATIONARY_WATER, 0);
+        restrictedItems.put(Material.LEGACY_STATIONARY_LAVA, 0);
+        restrictedItems.put(Material.LEGACY_STATIONARY_WATER, 0);
         restrictedItems.put(Material.TNT, 0);
     }
 
@@ -584,41 +584,40 @@ public class CivSettings {
         switchItems.add(Material.ANVIL);
         switchItems.add(Material.BEACON);
         switchItems.add(Material.BREWING_STAND);
-        switchItems.add(Material.BURNING_FURNACE);
-        switchItems.add(Material.CAKE_BLOCK);
+        switchItems.add(Material.LEGACY_BURNING_FURNACE);
+        switchItems.add(Material.LEGACY_CAKE_BLOCK);
         switchItems.add(Material.CAULDRON);
         switchItems.add(Material.CHEST);
         switchItems.add(Material.TRAPPED_CHEST);
-        switchItems.add(Material.COMMAND);
-        switchItems.add(Material.DIODE);
-        switchItems.add(Material.DIODE_BLOCK_OFF);
-        switchItems.add(Material.DIODE_BLOCK_ON);
+        switchItems.add(Material.LEGACY_COMMAND);
+        switchItems.add(Material.LEGACY_DIODE);
+        switchItems.add(Material.LEGACY_DIODE_BLOCK_OFF);
+        switchItems.add(Material.LEGACY_DIODE_BLOCK_ON);
         switchItems.add(Material.DISPENSER);
-        switchItems.add(Material.FENCE_GATE);
+        switchItems.add(Material.LEGACY_FENCE_GATE);
         switchItems.add(Material.FURNACE);
         switchItems.add(Material.JUKEBOX);
         switchItems.add(Material.LEVER);
         //	switchItems.add(Material.LOCKED_CHEST);
         switchItems.add(Material.STONE_BUTTON);
-        switchItems.add(Material.STONE_PLATE);
+        switchItems.add(Material.LEGACY_STONE_PLATE);
         switchItems.add(Material.IRON_DOOR);
         switchItems.add(Material.TNT);
-        switchItems.add(Material.TRAP_DOOR);
-        switchItems.add(Material.WOOD_DOOR);
-        switchItems.add(Material.WOODEN_DOOR);
-        switchItems.add(Material.WOOD_PLATE);
+        switchItems.add(Material.LEGACY_TRAP_DOOR);
+        switchItems.add(Material.LEGACY_WOOD_DOOR);
+        switchItems.add(Material.LEGACY_WOODEN_DOOR);
+        switchItems.add(Material.LEGACY_WOOD_PLATE);
         //switchItems.put(Material.WOOD_BUTTON, 0); //intentionally left out
 
         // 1.5 additions.
         switchItems.add(Material.HOPPER);
         switchItems.add(Material.HOPPER_MINECART);
         switchItems.add(Material.DROPPER);
-        switchItems.add(Material.REDSTONE_COMPARATOR);
-        switchItems.add(Material.REDSTONE_COMPARATOR_ON);
-        switchItems.add(Material.REDSTONE_COMPARATOR_OFF);
-        switchItems.add(Material.TRAPPED_CHEST);
-        switchItems.add(Material.GOLD_PLATE);
-        switchItems.add(Material.IRON_PLATE);
+        switchItems.add(Material.LEGACY_REDSTONE_COMPARATOR);
+        switchItems.add(Material.LEGACY_REDSTONE_COMPARATOR_ON);
+        switchItems.add(Material.LEGACY_REDSTONE_COMPARATOR_OFF);
+        switchItems.add(Material.LEGACY_GOLD_PLATE);
+        switchItems.add(Material.LEGACY_IRON_PLATE);
         switchItems.add(Material.IRON_TRAPDOOR);
 
         // 1.6 additions.
@@ -642,7 +641,7 @@ public class CivSettings {
          * by specific events such as portal or fire creation.
          */
         blockPlaceExceptions.put(Material.FIRE, 0);
-        blockPlaceExceptions.put(Material.PORTAL, 0);
+        blockPlaceExceptions.put(Material.LEGACY_PORTAL, 0);
     }
 
     public static String getStringBase(String path) throws InvalidConfiguration {
@@ -949,9 +948,9 @@ public class CivSettings {
         out.append(CivColor.PurpleItalic + CivSettings.localize.localizedString("var_tradeGood_heading"));
         out.append(";");
         for (ConfigBuff cBuff : configTradeGood.buffs.values()) {
-            out.append((Object) ChatColor.UNDERLINE).append(cBuff.name);
+            out.append(ChatColor.UNDERLINE).append(cBuff.name);
             out.append(";");
-            out.append("§f" + (Object) ChatColor.ITALIC).append(cBuff.description);
+            out.append("§f" + ChatColor.ITALIC).append(cBuff.description);
             out.append(";");
         }
         if (configTradeGood.water) {
@@ -960,7 +959,7 @@ public class CivSettings {
             out.append("§a" + CivSettings.localize.localizedString("var_tradegood_earth"));
         }
         out.append(";");
-        if (!StringUtils.isBlank((String) addText)) {
+        if (!StringUtils.isBlank(addText)) {
             out.append(addText);
             out.append(";");
         }

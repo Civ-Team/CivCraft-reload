@@ -18,7 +18,6 @@ import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.EntityProximity;
 import com.avrgaming.civcraft.util.ItemManager;
 import com.avrgaming.civcraft.war.WarRegen;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -35,7 +34,7 @@ import java.util.Random;
 public class CannonProjectile {
     public Cannon cannon;
     public Location loc;
-    private Location startLoc;
+    private final Location startLoc;
     public Resident whoFired;
     public double speed = 1.0f;
 
@@ -162,7 +161,7 @@ public class CannonProjectile {
         }
 
         /* Instantly kill any players caught in the blast. */
-        LinkedList<Entity> players = EntityProximity.getNearbyEntities(null, loc, yield, EntityPlayer.class);
+        LinkedList<Entity> players = EntityProximity.getNearPlaybyEntities(loc, yield);
         for (Entity e : players) {
             Player player = (Player) e;
             player.damage(playerDamage);
@@ -195,16 +194,12 @@ public class CannonProjectile {
             return true;
         }
 
-        if (loc.distance(startLoc) > maxRange) {
-            return true;
-        }
-
-        return false;
+        return loc.distance(startLoc) > maxRange;
     }
 
     public void fire() {
         class SyncTask implements Runnable {
-            CannonProjectile proj;
+            final CannonProjectile proj;
 
             public SyncTask(CannonProjectile proj) {
                 this.proj = proj;

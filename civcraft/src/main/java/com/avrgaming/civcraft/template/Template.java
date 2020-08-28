@@ -54,8 +54,6 @@ public class Template {
         WONDER,
     }
 
-    ;
-
     public SimpleBlock[][][] blocks;
     public int size_x;
     public int size_y;
@@ -63,7 +61,7 @@ public class Template {
     private String strTheme;
     private String dir;
     private String filepath;
-    private Queue<SimpleBlock> sbs; //Blocks to add to main sync task queue;
+    private final Queue<SimpleBlock> sbs; //Blocks to add to main sync task queue;
 
     /* Save the command block locations when we init the template, so we dont have to search for them later. */
     //初始化模板时，请保存命令块的位置，因此我们以后不必搜索它们。
@@ -107,15 +105,15 @@ public class Template {
     }
 
     public static void initAttachableTypes() {
-        attachableTypes.add(ItemManager.getId(Material.SAPLING));
-        attachableTypes.add(ItemManager.getId(Material.BED));
-        attachableTypes.add(ItemManager.getId(Material.BED_BLOCK));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_SAPLING));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_BED));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_BED_BLOCK));
         attachableTypes.add(ItemManager.getId(Material.POWERED_RAIL));
         attachableTypes.add(ItemManager.getId(Material.DETECTOR_RAIL));
-        attachableTypes.add(ItemManager.getId(Material.LONG_GRASS));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_LONG_GRASS));
         attachableTypes.add(ItemManager.getId(Material.DEAD_BUSH));
-        attachableTypes.add(ItemManager.getId(Material.YELLOW_FLOWER));
-        attachableTypes.add(ItemManager.getId(Material.RED_ROSE));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_YELLOW_FLOWER));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_RED_ROSE));
         attachableTypes.add(ItemManager.getId(Material.BROWN_MUSHROOM));
         attachableTypes.add(ItemManager.getId(Material.RED_MUSHROOM));
         attachableTypes.add(ItemManager.getId(Material.TORCH));
@@ -124,18 +122,18 @@ public class Template {
 //		attachableTypes.add(ItemManager.getId(Material.SIGN_POST));
 //		attachableTypes.add(ItemManager.getId(Material.WALL_SIGN));
         attachableTypes.add(ItemManager.getId(Material.LADDER));
-        attachableTypes.add(ItemManager.getId(Material.RAILS));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_RAILS));
         attachableTypes.add(ItemManager.getId(Material.LEVER));
-        attachableTypes.add(ItemManager.getId(Material.STONE_PLATE));
-        attachableTypes.add(ItemManager.getId(Material.WOOD_PLATE));
-        attachableTypes.add(ItemManager.getId(Material.REDSTONE_TORCH_ON));
-        attachableTypes.add(ItemManager.getId(Material.REDSTONE_TORCH_OFF));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_STONE_PLATE));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_WOOD_PLATE));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_REDSTONE_TORCH_ON));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_REDSTONE_TORCH_OFF));
         attachableTypes.add(ItemManager.getId(Material.STONE_BUTTON));
         attachableTypes.add(ItemManager.getId(Material.CACTUS));
         attachableTypes.add(ItemManager.getId(Material.SUGAR_CANE));
         attachableTypes.add(93); //redstone repeater off
         attachableTypes.add(94); //redstone repeater on
-        attachableTypes.add(ItemManager.getId(Material.TRAP_DOOR));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_TRAP_DOOR));
         attachableTypes.add(ItemManager.getId(Material.PUMPKIN_STEM));
         attachableTypes.add(ItemManager.getId(Material.MELON_STEM));
         attachableTypes.add(ItemManager.getId(Material.VINE));
@@ -147,21 +145,18 @@ public class Template {
         attachableTypes.add(ItemManager.getId(Material.FLOWER_POT));
         attachableTypes.add(ItemManager.getId(Material.CARROT));
         attachableTypes.add(ItemManager.getId(Material.POTATO));
-        attachableTypes.add(ItemManager.getId(Material.WOOD_BUTTON));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_WOOD_BUTTON));
         attachableTypes.add(ItemManager.getId(Material.ANVIL));
-        attachableTypes.add(ItemManager.getId(Material.GOLD_PLATE));
-        attachableTypes.add(ItemManager.getId(Material.IRON_PLATE));
-        attachableTypes.add(ItemManager.getId(Material.REDSTONE_COMPARATOR_ON));
-        attachableTypes.add(ItemManager.getId(Material.REDSTONE_COMPARATOR_OFF));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_GOLD_PLATE));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_IRON_PLATE));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_REDSTONE_COMPARATOR_ON));
+        attachableTypes.add(ItemManager.getId(Material.LEGACY_REDSTONE_COMPARATOR_OFF));
         attachableTypes.add(ItemManager.getId(Material.DAYLIGHT_DETECTOR));
         attachableTypes.add(ItemManager.getId(Material.ACTIVATOR_RAIL));
     }
 
     public static boolean isAttachable(int blockID) {
-        if (attachableTypes.contains(blockID)) {
-            return true;
-        }
-        return false;
+        return attachableTypes.contains(blockID);
     }
 
 

@@ -69,7 +69,7 @@ public class Camp extends Buildable {
     private int firepoints;
     private BlockCoord corner;
 
-    private HashMap<String, Resident> members = new HashMap<String, Resident>();
+    private final HashMap<String, Resident> members = new HashMap<String, Resident>();
     public static final double SHIFT_OUT = 2;
     public static final String SUBDIR = "camp";
     private boolean undoable = false;
@@ -107,15 +107,15 @@ public class Camp extends Buildable {
     private Date nextRaidDate;
     private int raidLength;
 
-    private HashMap<String, ConfigCampUpgrade> upgrades = new HashMap<String, ConfigCampUpgrade>();
+    private final HashMap<String, ConfigCampUpgrade> upgrades = new HashMap<String, ConfigCampUpgrade>();
 
     public static void newCamp(Resident resident, Player player, String name) {
 
         class SyncTask implements Runnable {
 
-            Resident resident;
-            String name;
-            Player player;
+            final Resident resident;
+            final String name;
+            final Player player;
 
             public SyncTask(Resident resident, String name, Player player) {
                 this.resident = resident;
@@ -447,7 +447,7 @@ public class Camp extends Buildable {
             switch (sb.command) {
                 case "/gardensign":
                     if (!this.gardenEnabled) {
-                        ItemManager.setTypeId(absCoord.getBlock(), ItemManager.getId(Material.SIGN_POST));
+                        ItemManager.setTypeId(absCoord.getBlock(), ItemManager.getId(Material.LEGACY_SIGN_POST));
                         ItemManager.setData(absCoord.getBlock(), sb.getData());
 
                         Sign sign = (Sign) absCoord.getBlock().getState();
@@ -514,7 +514,7 @@ public class Camp extends Buildable {
                         ItemManager.setData(absCoord.getBlock(), data2);
                     } else {
                         try {
-                            ItemManager.setTypeId(absCoord.getBlock(), ItemManager.getId(Material.SIGN_POST));
+                            ItemManager.setTypeId(absCoord.getBlock(), ItemManager.getId(Material.LEGACY_SIGN_POST));
                             ItemManager.setData(absCoord.getBlock(), sb.getData());
 
                             Sign sign = (Sign) absCoord.getBlock().getState();
@@ -536,7 +536,7 @@ public class Camp extends Buildable {
                         byte data3 = CivData.convertSignDataToChestData((byte) sb.getData());
                         ItemManager.setData(absCoord.getBlock(), data3);
                     } else {
-                        ItemManager.setTypeId(absCoord.getBlock(), ItemManager.getId(Material.SIGN_POST));
+                        ItemManager.setTypeId(absCoord.getBlock(), ItemManager.getId(Material.LEGACY_SIGN_POST));
                         ItemManager.setData(absCoord.getBlock(), sb.getData());
 
                         Sign sign = (Sign) absCoord.getBlock().getState();
@@ -560,8 +560,8 @@ public class Camp extends Buildable {
                     bottomData |= doorDirection;
 
 
-                    ItemManager.setTypeIdAndData(doorBlock, ItemManager.getId(Material.WOODEN_DOOR), bottomData, false);
-                    ItemManager.setTypeIdAndData(doorBlock2, ItemManager.getId(Material.WOODEN_DOOR), topData, false);
+                    ItemManager.setTypeIdAndData(doorBlock, ItemManager.getId(Material.LEGACY_WOODEN_DOOR), bottomData, false);
+                    ItemManager.setTypeIdAndData(doorBlock2, ItemManager.getId(Material.LEGACY_WOODEN_DOOR), topData, false);
 
                     this.addCampBlock(new BlockCoord(doorBlock));
                     this.addCampBlock(new BlockCoord(doorBlock2));
@@ -571,7 +571,7 @@ public class Camp extends Buildable {
                     break;
                 case "/literal":
                     /* Unrecognized command... treat as a literal sign. */
-                    ItemManager.setTypeId(absCoord.getBlock(), ItemManager.getId(Material.WALL_SIGN));
+                    ItemManager.setTypeId(absCoord.getBlock(), ItemManager.getId(Material.LEGACY_WALL_SIGN));
                     ItemManager.setData(absCoord.getBlock(), sb.getData());
 
                     Sign sign = (Sign) absCoord.getBlock().getState();

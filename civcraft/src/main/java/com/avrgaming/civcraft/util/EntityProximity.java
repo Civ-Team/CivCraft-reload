@@ -1,13 +1,12 @@
 package com.avrgaming.civcraft.util;
 
-import net.minecraft.server.v1_12_R1.AxisAlignedBB;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
-import org.bukkit.entity.Entity;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 public class EntityProximity {
 
@@ -18,33 +17,41 @@ public class EntityProximity {
      * Optionally provide an entity that is exempt from these checks.
      * Also optionally provide a filter so we can only capture specific types of entities.
      */
-    public static LinkedList<Entity> getNearbyEntities(Entity exempt, Location loc, double radius, Class<?> filter) {
-        LinkedList<Entity> entities = new LinkedList<Entity>();
+    public static LinkedList<Entity> getNearPlaybyEntities(Location location, double radius) {
+        LinkedList<Entity> result = new LinkedList<>();
+        double square = radius * radius;
 
+        Collection<Entity> nearbyEntities = location.getWorld().getNearbyEntities(location, radius, radius, radius);
+
+        for (Entity nearbyEntity : nearbyEntities) {
+            if (nearbyEntity instanceof Player && nearbyEntity.getLocation().distanceSquared(location) < square) {
+                result.add(nearbyEntity);
+            }
+        }
+
+        return result;
+        /*LinkedList<Entity> resultList = new LinkedList<>();
         double x = loc.getX() + 0.5;
         double y = loc.getY() + 0.5;
         double z = loc.getZ() + 0.5;
         double r = radius;
-
-        CraftWorld craftWorld = (CraftWorld) loc.getWorld();
+        World world =  loc.getWorld();
+        world.getNearbyEntities()
         AxisAlignedBB bb = new AxisAlignedBB(x - r, y - r, z - r, x + r, y + r, z + r);
 
-        List<net.minecraft.server.v1_12_R1.Entity> eList;
+        List<Entity> tempList;
         if (exempt != null) {
-            eList = craftWorld.getHandle().getEntities(((CraftEntity) exempt).getHandle(), bb);
+            tempList = craftWorld.getHandle().getEntities(((Entity) exempt).getHandle(), bb);
         } else {
-            eList = craftWorld.getHandle().getEntities(null, bb);
+            tempList = craftWorld.getHandle().getEntities(null, bb);
         }
 
-        for (net.minecraft.server.v1_12_R1.Entity e : eList) {
-
-
+        for (Entity e : tempList) {
             if (filter == null || (filter.isInstance(e))) {
-                entities.add(e.getBukkitEntity());
+                resultList.add(e);
             }
         }
-
-        return entities;
+        return resultList;*/
     }
 
 }

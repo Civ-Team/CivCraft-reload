@@ -52,7 +52,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -256,7 +255,7 @@ public class AdminCommand extends CommandBase {
         CivMessage.globalTitle(CivSettings.localize.localizedString("goodieRepoBroadcast"), "");
     }
 
-    public void reloadgov_cmd() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
+    public void reloadgov_cmd() throws IOException, InvalidConfigurationException, InvalidConfiguration {
         CivSettings.reloadGovConfigFiles();
         for (Civilization civ : CivGlobal.getCivs()) {
             ConfigGovernment gov = civ.getGovernment();
@@ -320,17 +319,17 @@ public class AdminCommand extends CommandBase {
             for (ConfigMaterialCategory cat : ConfigMaterialCategory.getCategories()) {
                 int identifier;
                 if (cat.name.contains("Fish")) {
-                    identifier = ItemManager.getId(Material.RAW_FISH);
+                    identifier = ItemManager.getId(Material.LEGACY_RAW_FISH);
                 } else if (cat.name.contains("Catalyst")) {
                     identifier = ItemManager.getId(Material.BOOK);
                 } else if (cat.name.contains("Gear")) {
                     identifier = ItemManager.getId(Material.IRON_SWORD);
                 } else if (cat.name.contains("Materials")) {
-                    identifier = ItemManager.getId(Material.WOOD_STEP);
+                    identifier = ItemManager.getId(Material.LEGACY_WOOD_STEP);
                 } else if (cat.name.contains("Tools")) {
-                    identifier = ItemManager.getId(Material.IRON_SPADE);
+                    identifier = ItemManager.getId(Material.LEGACY_IRON_SPADE);
                 } else if (cat.name.contains("Eggs")) {
-                    identifier = ItemManager.getId(Material.MONSTER_EGG);
+                    identifier = ItemManager.getId(Material.LEGACY_MONSTER_EGG);
                 } else {
                     identifier = ItemManager.getId(Material.WRITTEN_BOOK);
                 }
@@ -452,7 +451,7 @@ public class AdminCommand extends CommandBase {
     }
 
     public void server_cmd() {
-        CivMessage.send(sender, Bukkit.getServerName());
+        CivMessage.send(sender, Bukkit.getServer().getName());
     }
 
 
@@ -551,7 +550,7 @@ public class AdminCommand extends CommandBase {
     public void permissionCheck() throws CivException {
 
         if (sender instanceof Player) {
-            if (((Player) sender).hasPermission(CivSettings.MINI_ADMIN)) {
+            if (sender.hasPermission(CivSettings.MINI_ADMIN)) {
                 return;
             }
         }

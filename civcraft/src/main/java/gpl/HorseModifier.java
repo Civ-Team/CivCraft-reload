@@ -2,14 +2,12 @@ package gpl;
 
 import com.avrgaming.civcraft.main.CivCraft;
 import com.avrgaming.civcraft.main.CivLog;
-import net.minecraft.server.v1_12_R1.AttributeInstance;
-import net.minecraft.server.v1_12_R1.AttributeModifier;
-import net.minecraft.server.v1_12_R1.EntityInsentient;
-import net.minecraft.server.v1_12_R1.GenericAttributes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -100,11 +98,11 @@ public class HorseModifier {
             return;
         }
 
-        EntityInsentient nmsEntity = (EntityInsentient) ((CraftLivingEntity) entity).getHandle();
-        AttributeInstance attributes = nmsEntity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
-        AttributeModifier modifier = new AttributeModifier(movementSpeedUID, "civcraft horse movement speed", amount, 0);
-        attributes.b(modifier); //remove the modifier, adding a duplicate causes errors
-        attributes.a(modifier); //add the modifier
+        AttributeInstance instance = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        AttributeModifier modifier = new AttributeModifier(movementSpeedUID, "civcraft horse movement speed", amount, AttributeModifier.Operation.ADD_NUMBER);
+        instance.addModifier(modifier);
+        //attributes.b(modifier); //remove the modifier, adding a duplicate causes errors
+        //attributes.a(modifier); //add the modifier
 
         //done??
     }
@@ -124,14 +122,9 @@ public class HorseModifier {
             return false;
         }
 
-        EntityInsentient nmsEntity = (EntityInsentient) ((CraftLivingEntity) entity).getHandle();
-        AttributeInstance attributes = nmsEntity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
+        AttributeInstance attributes = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
 
-        if (attributes.a(movementSpeedUID) == null) {
-            return false;
-        }
-
-        return true;
+        return attributes.getModifiers().stream().noneMatch(x -> x.getUniqueId().equals(movementSpeedUID));
 
         //	AttributeModifier modifier = new AttributeModifier(movementSpeedUID, "civcraft horse movement speed", amount, 1);
         //attributes.b(modifier); //remove the modifier, adding a duplicate causes errors
@@ -318,8 +311,8 @@ public class HorseModifier {
 
         NORMAL("normal", 0), DONKEY("donkey", 1), MULE("mule", 2), UNDEAD("undead", 3), SKELETAL("skeletal", 4);
 
-        private String name;
-        private int id;
+        private final String name;
+        private final int id;
 
         HorseType(String name, int id) {
             this.name = name;
@@ -371,8 +364,8 @@ public class HorseModifier {
                 "creamy-black dots", 1025), CHESTNUT_BLACK_DOTS("chestnut-black dots", 1026), BROWN_BLACK_DOTS("brown-black dots", 1027), BLACK_BLACK_DOTS("black-black dots", 1028), GRAY_BLACK_DOTS(
                 "gray-black dots", 1029), DARK_BROWN_BLACK_DOTS("dark brown-black dots", 1030);
 
-        private String name;
-        private int id;
+        private final String name;
+        private final int id;
 
         HorseVariant(String name, int id) {
             this.name = name;
@@ -447,10 +440,10 @@ public class HorseModifier {
         public static void setValue(Object nbtTagCompound, String key, Object value) {
             try {
                 if (value instanceof Integer) {
-                    ReflectionUtil.getMethod("setInt", nbtTagCompound.getClass(), 2).invoke(nbtTagCompound, key, (Integer) value);
+                    ReflectionUtil.getMethod("setInt", nbtTagCompound.getClass(), 2).invoke(nbtTagCompound, key, value);
                     return;
                 } else if (value instanceof Boolean) {
-                    ReflectionUtil.getMethod("setBoolean", nbtTagCompound.getClass(), 2).invoke(nbtTagCompound, key, (Boolean) value);
+                    ReflectionUtil.getMethod("setBoolean", nbtTagCompound.getClass(), 2).invoke(nbtTagCompound, key, value);
                     return;
                 } else {
                     ReflectionUtil.getMethod("set", nbtTagCompound.getClass(), 2).invoke(nbtTagCompound, key, value);

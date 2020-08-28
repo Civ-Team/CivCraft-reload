@@ -49,7 +49,7 @@ public class SimpleBlock {
 
     public Type specialType;
     public String command;
-    public String message[] = new String[4];
+    public String[] message = new String[4];
     public String worldname;
     public Buildable buildable;
     public Map<String, String> keyvalues = new HashMap<String, String>();
@@ -72,9 +72,9 @@ public class SimpleBlock {
     public SimpleBlock(String hash, int type, byte data) {
         String[] split = hash.split(",");
         this.worldname = split[0];
-        this.x = Integer.valueOf(split[1]);
-        this.y = Integer.valueOf(split[2]);
-        this.z = Integer.valueOf(split[3]);
+        this.x = Integer.parseInt(split[1]);
+        this.y = Integer.parseInt(split[2]);
+        this.z = Integer.parseInt(split[3]);
         this.type = type;
         this.data = data;
         this.specialType = Type.NORMAL;
@@ -105,12 +105,17 @@ public class SimpleBlock {
      * @return the type
      */
     public int getType() {
-        return (int) type;
+        return type;
     }
 
     @SuppressWarnings("deprecation")
     public Material getMaterial() {
-        return Material.getMaterial(type);
+        for (Material value : Material.values()) {
+            if (value.getId()==type) {
+                return value;
+            }
+        }
+        return null;
     }
 
     /**
@@ -129,7 +134,7 @@ public class SimpleBlock {
      * @return the data
      */
     public int getData() {
-        return (int) data;
+        return data;
     }
 
     /**
